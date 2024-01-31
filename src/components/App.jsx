@@ -22,25 +22,9 @@ const [values, setValues] = useState(() => ({
 
 
   useEffect(() => {
-     localStorage.setItem('contacts', JSON.stringify(contacts))
-  }, [contacts])
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevState.contacts !== this.state.contacts) {
-  //     localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
-  //   }
-  // }
+    localStorage.setItem('contacts', JSON.stringify(contacts))
+  }, [contacts]);
 
-  // componentDidMount() {
-  //   const dataContacts = JSON.parse(localStorage.getItem('contacts'))
-  //   if (dataContacts && dataContacts.length) {
-  //     this.setState({
-  //       contacts: dataContacts,
-  //     })
-  //   }
-  // } 
-
-
-  
  const onChangeInput = (event) => {
     const { name, value } = event.currentTarget;
    setValues((prevValues) => ({
