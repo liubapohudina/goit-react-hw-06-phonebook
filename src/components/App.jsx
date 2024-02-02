@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { nanoid } from 'nanoid';
 import { useSelector, useDispatch } from "react-redux";
-import { addContancts, addFilter, deleteContacts } from '../redux/actions';
+import { addFilter } from '../redux/filter/filter-actions';
+import { addContancts, deleteContacts } from '../redux/contacts/contacts-actions';
 import Form from './Form/Form';
 import Title from "./Form/Title";
 
@@ -16,6 +17,7 @@ export const App = () => {
   const contacts = useSelector(store => store.contacts);
   const filter = useSelector(store => store.filter)
   
+  
   const [values, setValues] = useState('');
 
   const dispatch = useDispatch();
@@ -24,9 +26,9 @@ export const App = () => {
     const filterValue = event.target.value
      const action = addFilter({filter: filterValue})
     dispatch(action)
-
   }
- 
+
+
 
 
  const onChangeInput = (event) => {
