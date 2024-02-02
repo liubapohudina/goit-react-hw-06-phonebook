@@ -1,11 +1,10 @@
-import { createStore } from 'redux';
-import { devToolsEnhancer } from '@redux-devtools/extension';
+import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './rootReducer';
 
 
-const enhancer = devToolsEnhancer();
 
-
-const store = createStore(rootReducer, enhancer);
+const store = configureStore({
+    reducer: rootReducer,
+});
 
 export default store;
