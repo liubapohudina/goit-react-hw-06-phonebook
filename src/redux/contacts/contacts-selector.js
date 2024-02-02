@@ -1,9 +1,27 @@
 
 
 export const contacts = store => store.contacts;
+
+// export const filterContacts = store => {
+//     const { contacts, filter } = store;
+//     const filteredContacts = contacts.filter(item => item.name?.trim().toLocaleLowerCase().includes(filter.trim()));
+//     console.log(contacts);
+//     console.log(filter)
+//    return filteredContacts;
+// };
 export const filterContacts = store => {
     const { contacts, filter } = store;
-    const filteredContacts = contacts.filter(item => item.name?.toLocaleLowerCase().includes(filter?.toLocaleLowerCase()));
-    console.log(contacts);
-   return filteredContacts;
+
+  if (!filter || typeof filter !== 'string') {
+        return contacts;
+    }
+
+    const normalizedFilter = filter.toLowerCase();
+
+    const filteredContacts = contacts.filter(({ name }) => {
+        const normalizedName = (name || '').toLowerCase();
+        return normalizedName.includes(normalizedFilter);
+    });
+
+    return filteredContacts;
 };
