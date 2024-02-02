@@ -16,10 +16,10 @@ export const filterContacts = store => {
         return contacts;
     }
 
-    const normalizedFilter = filter.toLowerCase();
+    const normalizedFilter = filter.trim().toLowerCase();
 
     const filteredContacts = contacts.filter(({ name }) => {
-        const normalizedName = (name || '').toLowerCase();
+        const normalizedName = (name || '').trim().toLowerCase();
         return normalizedName.includes(normalizedFilter);
     });
 
