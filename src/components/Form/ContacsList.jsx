@@ -1,27 +1,38 @@
 import React from "react";
 import styles from "./form.module.css";
-import PropTypes  from "prop-types";
+import PropTypes from "prop-types";
+import { deleteContacts } from '../../redux/contacts/contacts-actions';
+import { useDispatch, useSelector } from "react-redux";
+import { filterContacts } from '../../redux/contacts/contacts-selector';
 
+const ContactList = () => {
+  const filteredContacts = useSelector(filterContacts);
+  console.log(filteredContacts);
 
+  const dispatch = useDispatch();
 
+  const onClickDelete = (event) => {
+    const selectContact = event.currentTarget.id;
+    dispatch(deleteContacts(selectContact));
+  }
 
+  const elements = filteredContacts.map(item => (
+    <li className={styles.listContacts} key={item.id}>
+      <p>{item.name}  {item.number}</p>
+      <button id={item.id} className={styles.btn} onClick={onClickDelete} type="button">Delete</button> 
+    </li>
+  ));
 
-const ContactList = ({filterContacts, onClickDelete }) => {
-    const elements = filterContacts.map(item => <li className={styles.listContacts} key={item.id}>
-        <p>{item.name}  {item.number}</p>
-        <button id={item.id} className={styles.btn} onClick={onClickDelete} type="button">Delete</button> 
-    </li>)
-    return (
-        <div className="contactsList">
-            <ul>{elements}</ul>
-            </div>
-    )
+  return (
+    <div className="contactsList">
+      <ul>{elements}</ul>
+    </div>
+  );
 }
-
 
 export default ContactList;
 
 ContactList.propTypes = {
-    filterContacts: PropTypes.array,
-    onClickDelete: PropTypes.func,
-}
+  filteredContacts: PropTypes.array,
+  onClickDelete: PropTypes.func,
+};

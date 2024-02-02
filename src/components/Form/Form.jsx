@@ -1,9 +1,58 @@
 import React from "react";
 import Button from "./Button";
 import styles from './form.module.css';
-import PropTypes  from "prop-types";
+import PropTypes from "prop-types";
+import { nanoid } from 'nanoid';
+import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { addContancts} from '../../redux/contacts/contacts-actions';
 
-const Form = ({ onChangeInput,   onClickSubmit}) => {
+
+const Form = () => {
+    const contacts = useSelector(store => store.contacts);
+    const dispatch = useDispatch();
+    const [values, setValues] = useState('');
+     const onChangeInput = (event) => {
+   const { name, value} = event.currentTarget;
+   setValues((prevValues) => ({
+     ...prevValues,
+     [name]: value,
+   }));
+  }
+
+
+  const onClickSubmit = (event) => {
+    event.preventDefault(); 
+    const { name } = values;
+    const isExist = contacts.findIndex(el => el.name.toLocaleLowerCase().trim() === name.toLocaleLowerCase().trim());
+
+    if (isExist >= 0) {
+      alert(`Contact ${name} already exists!`);
+      return;
+    }
+    
+    setValues({
+      contacts: [
+        ...contacts,
+        {
+          number: values.number,
+          name: values.name,
+          id: nanoid(),
+        }
+      ],
+      name: '',
+      number: '',
+    });
+    event.currentTarget.reset()
+
+    
+    const action = addContancts(values)
+    dispatch(action)
+    }
+    
+  
+
+ 
     return (
         <form className={styles.form} onSubmit={onClickSubmit}>
             <label htmlFor="name">Name</label>
@@ -16,7 +65,6 @@ const Form = ({ onChangeInput,   onClickSubmit}) => {
         </form>
     )
 }
-
 
 export default Form;
 
