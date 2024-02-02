@@ -22,6 +22,6 @@ const ContactList = ({filterContacts, onClickDelete }) => {
 export default ContactList;
 
 ContactList.propTypes = {
-    filterContacts: PropTypes.array.isRequired,
+    filterContacts: PropTypes.array,
     onClickDelete: PropTypes.func,
 }

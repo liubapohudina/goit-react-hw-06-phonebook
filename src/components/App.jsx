@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
-import { nanoid } from 'nanoid'
+import { useState } from "react";
+import { nanoid } from 'nanoid';
+import { useSelector, useDispatch } from "react-redux";
+import { addContancts, addFilter, deleteContacts } from '../redux/actions';
 import Form from './Form/Form';
 import Title from "./Form/Title";
 
@@ -9,44 +11,43 @@ import Filter from "./Form/FilterSearch";
 
 
 
+
 export const App = () => {
+  const contacts = useSelector(store => store.contacts);
+  const filter = useSelector(store => store.filter)
+  
+  const [values, setValues] = useState('');
+
+  const dispatch = useDispatch();
+  
+  const onChangeFilter = (event) => {
+    const filterValue = event.target.value
+     const action = addFilter({filter: filterValue})
+    dispatch(action)
+
+  }
  
-const [values, setValues] = useState(() => ({
-  contacts: JSON.parse(localStorage.getItem('contacts')) || [],
-  // name: '',
-  // number: '',
-  filter: '',
-}));
 
-  const { contacts, filter } = values;
-
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts))
-  }, [contacts]);
 
  const onChangeInput = (event) => {
-    const { name, value } = event.currentTarget;
+   const { name, value} = event.currentTarget;
    setValues((prevValues) => ({
      ...prevValues,
-     [name]: value
+     [name]: value,
    }));
   }
 
-  const onClickSubmit = (event) => {
-    //console.log(event.target)
-    event.preventDefault(); 
 
+  const onClickSubmit = (event) => {
+    event.preventDefault(); 
     const { name } = values;
-    const isExist = values.contacts.findIndex(el => el.name.toLocaleLowerCase().trim() === name.toLocaleLowerCase().trim());
-    //console.log(isExist)
+    const isExist = contacts.findIndex(el => el.name.toLocaleLowerCase().trim() === name.toLocaleLowerCase().trim());
 
     if (isExist >= 0) {
       alert(`Contact ${name} already exists!`);
       return;
     }
-
-
+    
     setValues({
       contacts: [
         ...contacts,
@@ -58,37 +59,26 @@ const [values, setValues] = useState(() => ({
       ],
       name: '',
       number: '',
-      filter: '',
     });
     event.currentTarget.reset()
+
+    
+    const action = addContancts(values)
+    dispatch(action)
   }
-  
+
   const onClickDelete = (event) => {
-    const selectContact = event.currentTarget.id
-    //console.log(selectContact)
-    /*----------use method slice----------------*/
-    // const updateContactAfterDelete = this.state.contacts.splice(selectContact, 1)
-    // console.log(updateContactAfterDelete)
-    // this.setState({})
-    /*---------------------use method filter-----------*/
-    const updateContactAfterDelete = contacts.filter(item => item.id !== selectContact)
-    //console.log(updateContactAfterDelete)
-    setValues((prevValues) => ({
-      ...prevValues,
-      contacts: updateContactAfterDelete,
-    }))
-  }
-
-
-   const contactsArr = Object.values(contacts);
-    const filterContacts = contactsArr.filter((item => item.name?.toLocaleLowerCase().includes(filter?.toLocaleLowerCase())))
-    //console.log(filterContacts)
+     const selectContact = event.currentTarget.id
+  dispatch(deleteContacts(selectContact));
+}  
+ 
+  const filteredContacts = contacts.filter(item=> item.name?.toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
     return <div className="App">
      <Title title="Phonebook">
         <Form onChangeInput={onChangeInput}  onClickSubmit={onClickSubmit}/>
       </Title> 
-       {contacts.length !== 0? <Filter onChangeInput={onChangeInput} /> : ''}
-      {contacts.length !== 0 ? <ContactList filterContacts={filterContacts} onChangeInput={onChangeInput} onClickDelete={onClickDelete} /> : ''}
+       <Filter onChangeInput={onChangeFilter} /> 
+      <ContactList filterContacts={filteredContacts}  onClickDelete={onClickDelete} /> 
     </div>
   }
   
