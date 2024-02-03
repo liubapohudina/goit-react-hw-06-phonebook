@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { nanoid } from 'nanoid';
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import { addContancts} from '../../redux/contacts/contacts-actions';
+import { addContacts} from '../../redux/contacts/contacts-slice';
 
 
 const Form = () => {
@@ -46,7 +46,7 @@ const Form = () => {
     event.currentTarget.reset()
 
     
-    const action = addContancts(values)
+    const action = addContacts(values)
     dispatch(action)
     }
     

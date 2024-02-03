@@ -1,7 +1,7 @@
 import Title from './Title';
 import styles from './form.module.css';
 import PropTypes from "prop-types";
-import { addFilter } from '../../redux/filter/filter-actions';
+import { addFilter } from '../../redux/filter/filter-slice';
 import { useDispatch } from 'react-redux';
 
 const Filter = () => {
